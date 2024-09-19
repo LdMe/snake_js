@@ -45,7 +45,7 @@ var oldSnakeDirection; // Para evitar que la serpiente se pueda dar la vuelta so
 //-------------------- Funciones --------------------
 
 
-document.addEventListener("keydown", direccion);// Capturar teclas
+document.addEventListener("keydown", direction);// Capturar teclas
 
 // Crear comida
 function createFood() {
@@ -71,8 +71,8 @@ function restart() {
 }
 
 // Control de la serpiente
-function direccion(evento) {
-    var tecla = evento.keyCode;
+function direction(event) {
+    var tecla = event.keyCode;
     if (tecla == 37 && oldSnakeDirection != "RIGHT") {
         snakeDirection = "LEFT";
     } else if (tecla == 38 && oldSnakeDirection != "DOWN") {
@@ -88,7 +88,7 @@ function direccion(evento) {
 }
 
 // Colisiones
-function colision(head, array) {
+function collision(head, array) {
     for (var i = 0; i < array.length; i++) {
         if (head.x == array[i].x && head.y == array[i].y) {
             return true;
@@ -143,14 +143,14 @@ function drawScore(x) {
     ctx.fillText(x, 2 * cellSize.x, 1.6 * cellSize.y);
 }
 // Dibujar todo
-function dibujar() {
+function draw() {
     drawTable();
     drawSnake();
     drawFood();
     drawScore(puntuacion);
 }
 //Moverse 
-function moverse() {
+function move() {
     // Antigua posición de la cabeza de la serpiente
     var snakeX = snake[0].x;
     var snakeY = snake[0].y;
@@ -174,7 +174,7 @@ function moverse() {
 }
 
 //Comer
-function comer(snakeX,snakeY) {
+function eat(snakeX,snakeY) {
     if (snakeX == comida.x && snakeY == comida.y) {
         puntuacion++;
         createFood();
@@ -184,16 +184,24 @@ function comer(snakeX,snakeY) {
 }
 
 // Aumentar velocidad
-function aumentarVelocidad() {
+function increaseSpeed() {
     if (delay > 100)
     {
         delay *= 0.8;
     }
 }
 
+// Mirar si la cabeza se sale del tablero
+function outOfBounds(snakeX, snakeY) {
+    if (snakeX < 0 || snakeX >= cellsX || snakeY < 0 || snakeY >= cellsY) {
+        return true;
+    }
+    return false;
+}
+
 // Finalizar juego
 function gameOver(newHead) {
-    if (newHead.x < 0 || newHead.x >= cellsX || newHead.y < 0 || newHead.y >= cellsY || colision(newHead, snake)) {
+    if (outOfBounds(newHead.x, newHead.y) || collision(newHead, snake)) {
         // Detener el juego
         clearInterval(juego);
         console.log("Game Over");
@@ -204,12 +212,12 @@ function gameOver(newHead) {
 }
 
 // Función principal
-function actuar() {
+function act() {
     
-    var [snakeX, snakeY] = moverse();// Moverse nos devuelve la nueva posición de la cabeza
+    var [snakeX, snakeY] = move();// Moverse nos devuelve la nueva posición de la cabeza
     
-    if (comer(snakeX, snakeY)) {// Si la serpiente come
-        aumentarVelocidad();
+    if (eat(snakeX, snakeY)) {// Si la serpiente come
+        increaseSpeed();
         // No quitamos la cola porque la serpiente ha comido
     }
     else {
@@ -225,7 +233,7 @@ function actuar() {
      if (!gameOver(newHead)) {// Si no ha terminado el juego
         snake.unshift(newHead);// Añadir nueva cabeza
         oldSnakeDirection = snakeDirection;// Guardar dirección anterior
-        setTimeout(actuar, delay);// Llamar a la función principal después de un tiempo
+        setTimeout(act, delay);// Llamar a la función principal después de un tiempo
     }
     
     
@@ -234,6 +242,6 @@ function actuar() {
 // Inicializar juego
 setTimeout(getCanvas, 10);// Esperar a que se cargue el canvas
 createFood();
-actuar();
-var juego = setInterval(dibujar, 100);// Dibujar cada 100ms
+act();
+var juego = setInterval(draw, 100);// Dibujar cada 100ms
 

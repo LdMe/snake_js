@@ -1,5 +1,5 @@
 // Colisiones
-function colision(head, array) {
+function collision(head, array) {
     for (var i = 0; i < array.length; i++) {
         if (head.x == array[i].x && head.y == array[i].y) {
             return true;
@@ -9,7 +9,7 @@ function colision(head, array) {
 }
 
 // Colisiones
-function colision(head, array) {
+function collision(head, array) {
     /*TODO: para i de 0 al tamaño de array*/ {
         /*TODO: si coincide la posicion de la cabeza con la posicion del elemento i del cuerpo*/ {
             return true;

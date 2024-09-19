@@ -1,4 +1,4 @@
-function moverse() {
+function move() {
     // Antigua posición de la cabeza de la serpiente
     var snakeX = snake[0].x;
     var snakeY = snake[0].y;
@@ -22,7 +22,7 @@ function moverse() {
 }
 
 
-function moverse() {
+function move() {
     // Antigua posición de la cabeza de la serpiente
     var snakeX = /*TODO: posición x de la cabeza de la serpiente*/
     var snakeY = /*TODO: posición y de la cabeza de la serpiente*/
